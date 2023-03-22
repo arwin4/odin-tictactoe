@@ -1,23 +1,53 @@
 const gameBoard = (() => {
-  const rows = 3;
-  const columns = 3;
-  const board = [];
-
   // Initialize empty board, a two-dimensional array
-  for (let i = 0; i < rows; i += 1) {
-    board[i] = [];
-    for (let j = 0; j < columns; j += 1) {
-      board[i].push(0);
+  // 0 = blank cell.
+  const gameBoardArray = [];
+  for (let i = 0; i < 3; i += 1) {
+    gameBoardArray[i] = [];
+    for (let j = 0; j < 3; j += 1) {
+      gameBoardArray[i].push(0);
     }
   }
 
-  function play() {
-    gameBoard.board[0][0] = 1;
+  function makeMove(x, y, marker) {
+    if (gameBoardArray[y - 1][x - 1] === 0) {
+      gameBoardArray[y - 1][x - 1] = marker;
+      // also return checkForWin(marker)
+      return true;
+    }
+    return false;
   }
 
-  return { board, play };
+  // checkForWin(marker)
+  // resetBoard()
+  // getGameboard
+  const getGameBoard = () => gameBoardArray;
+
+  return { getGameBoard, makeMove };
 })();
 
-const displayController = (() => {
-  // connect to the dom
+const gameController = (() => {
+  const board = gameBoard.getGameBoard();
+  console.table(board);
+
+  // Ask for player 1 name and marker
+  // Ask for player 2 name, assign other marker
+
+  // show the (empty) board
+  // randomly assign who goes first
+  // ask for move
+  // if it was legal, show the board
+  // if checkforwin true, show winner, resetboard()
+
+  return {};
 })();
+
+const playerFactory = (name, marker) => {
+  const getName = () => name;
+  const getMarker = () => marker;
+
+  return { getName, getMarker };
+};
+
+const playerOne = playerFactory('beautiful name', 'X');
+const playerTwo = playerFactory('great name', 'O');
