@@ -5,12 +5,12 @@ const gameBoard = (() => {
   for (let i = 0; i < 3; i += 1) {
     gameBoardArray[i] = [];
     for (let j = 0; j < 3; j += 1) {
-      gameBoardArray[i].push(0);
+      gameBoardArray[i].push('.');
     }
   }
 
   function makeMove(x, y, marker) {
-    if (gameBoardArray[y - 1][x - 1] === 0) {
+    if (gameBoardArray[y - 1][x - 1] === '.') {
       gameBoardArray[y - 1][x - 1] = marker;
       // also return checkForWin(marker)
       return true;
@@ -27,8 +27,8 @@ const gameBoard = (() => {
 })();
 
 const gameController = (() => {
-  const board = gameBoard.getGameBoard();
-  console.table(board);
+  // const board = gameBoard.getGameBoard();
+  // console.table(board);
 
   // Ask for player 1 name and marker
   // Ask for player 2 name, assign other marker
@@ -38,6 +38,8 @@ const gameController = (() => {
   // ask for move
   // if it was legal, show the board
   // if checkforwin true, show winner, resetboard()
+
+  // function newGame
 
   return {};
 })();
