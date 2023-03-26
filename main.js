@@ -1,3 +1,6 @@
+// This program takes heavy inspiration from
+// https://www.ayweb.dev/blog/building-a-house-from-the-inside-out
+
 //TODO: Disable no-console ESLINT
 //TODO: Add underscore to private variables
 
