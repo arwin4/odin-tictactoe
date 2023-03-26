@@ -1,8 +1,9 @@
+/* eslint-disable no-console */
+
 // This program takes heavy inspiration from
 // https://www.ayweb.dev/blog/building-a-house-from-the-inside-out
 
-//TODO: Disable no-console ESLINT
-//TODO: Add underscore to private variables
+// TODO: Add underscore to private variables
 
 const playerFactory = (name, marker) => {
   const getName = () => name;
@@ -99,28 +100,8 @@ const gameBoard = (() => {
 })();
 
 const gameController = (() => {
-  // const board = gameBoard.getGameBoard();
-  // console.table(board);
-
-  // Ask for player 1 name and marker
-  // Ask for player 2 name, assign other marker
-
-  // show the (empty) board
-  // randomly assign who goes first
-  // ask for move
-  // if it was legal, show the board
-  // if checkforwin true, show winner, resetboard()
-  // switch player
-
-  // function newGame
-  // askPlayerInfo
-  // playRound
-  // switchPlayer
-  // getActivePlayer
-
   // function setPlayers(player1, marker1, player2, marker2) {
   //   // set player properties from DOM
-  // }
 
   function setPlayers() {
     const player1 = playerFactory('Player 1', 'X');
@@ -146,18 +127,18 @@ const gameController = (() => {
     if (gameBoard.makeMove(x, y, activePlayer.getMarker()) === false) {
       console.log("Sorry, that move isn't valid. Please try again.");
       printNewRound();
-      return;
+      return false;
     }
 
     // Check for a win or draw
     switch (gameBoard.checkForWin(activePlayer.getMarker())) {
       case true:
         console.log(`${activePlayer.getName()} wins!`);
-        // resetBoard();
+        screenController.deactivateClickableBoard();
         break;
       case false:
         console.log("It's a draw.");
-        // resetBoard();
+        screenController.deactivateClickableBoard();
         break;
       case undefined:
         console.log('No win or draw detected');
@@ -170,9 +151,65 @@ const gameController = (() => {
     console.log(`${activePlayer.getName()} made this move:`);
     printNewRound();
     switchPlayerTurn();
+    return true;
+  }
+
+  function getActivePlayer() {
+    return activePlayer;
   }
 
   printNewRound();
 
-  return { playRound, activePlayer };
+  return { playRound, getActivePlayer };
+})();
+
+const screenController = (() => {
+  // Render the board
+  const board = document.querySelector('.gameboard');
+
+  // Create the cells with coordinate attributes so that they can be passed on
+  // to gameRound(x, y)
+  for (let i = 0; i < 3; i += 1) {
+    for (let j = 0; j < 3; j += 1) {
+      const cell = document.createElement('button');
+      cell.setAttribute('xPosition', j + 1);
+      cell.setAttribute('yPosition', i + 1);
+      board.appendChild(cell);
+    }
+  }
+
+  function updateScreen(button) {
+    const btn = button;
+    console.log(`It's ${gameController.getActivePlayer().getName()}'s turn.`);
+
+    // Show the move on the board
+    // TODO: remove need for the active player's marker swap (allow direct
+    // passing of the marker)
+    if (gameController.getActivePlayer().getMarker() === 'X') {
+      btn.textContent = 'O';
+    } else {
+      btn.textContent = 'X';
+    }
+  }
+
+  function clickHandlerBoard(e) {
+    const xPosition = e.target.getAttribute('xPosition');
+    const yPosition = e.target.getAttribute('yPosition');
+    // Update the screen if the move was valid
+    if (gameController.playRound(xPosition, yPosition) === true) {
+      updateScreen(e.target);
+    }
+  }
+
+  function activateClickableBoard() {
+    board.addEventListener('click', clickHandlerBoard);
+  }
+
+  function deactivateClickableBoard() {
+    board.removeEventListener('click', clickHandlerBoard);
+  }
+
+  activateClickableBoard();
+
+  return { updateScreen, deactivateClickableBoard };
 })();

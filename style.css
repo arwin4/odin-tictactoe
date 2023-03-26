@@ -1,0 +1,30 @@
+body {
+  margin: 0px;
+  display: grid;
+  /* font-family: 'Martian Mono', monospace; */
+  background-color: silver;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.title {
+  text-align: center;
+}
+
+.gameboard {
+  display: grid;
+  grid-template-rows: repeat(3, 100px);
+  grid-template-columns: repeat(3, 100px);
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+
+  border: 1px solid black;
+
+  font-size: 3rem;
+}
