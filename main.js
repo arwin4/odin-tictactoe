@@ -13,13 +13,16 @@ const playerFactory = (name, marker) => {
 };
 
 const gameBoard = (() => {
-  // Initialize empty board, a two-dimensional array
-  // null = blank cell.
   const gameBoardArray = [];
-  for (let i = 0; i < 3; i += 1) {
-    gameBoardArray[i] = [];
-    for (let j = 0; j < 3; j += 1) {
-      gameBoardArray[i].push(null);
+
+  function resetBoard() {
+    // Initialize empty board, a two-dimensional array
+    // null = blank cell.
+    for (let i = 0; i < 3; i += 1) {
+      gameBoardArray[i] = [];
+      for (let j = 0; j < 3; j += 1) {
+        gameBoardArray[i].push(null);
+      }
     }
   }
 
@@ -96,7 +99,9 @@ const gameBoard = (() => {
     console.log(gameBoardArray[2]);
   }
 
-  return { getGameBoard, makeMove, printGameBoard, checkForWin };
+  resetBoard();
+
+  return { getGameBoard, makeMove, printGameBoard, checkForWin, resetBoard };
 })();
 
 const gameController = (() => {
@@ -132,17 +137,14 @@ const gameController = (() => {
 
     // Check for a win or draw
     switch (gameBoard.checkForWin(activePlayer.getMarker())) {
-      case true:
-        console.log(`${activePlayer.getName()} wins!`);
-        screenController.deactivateClickableBoard();
+      case true: // win
+        screenController.endGame(true);
         break;
-      case false:
-        console.log("It's a draw.");
-        screenController.deactivateClickableBoard();
+      case false: // draw
+        screenController.endGame(false);
         break;
-      case undefined:
+      case undefined: // No win or draw detected, game continues.
         console.log('No win or draw detected');
-        // No win or draw detected, game continues.
         break;
       default:
         break;
@@ -209,7 +211,42 @@ const screenController = (() => {
     board.removeEventListener('click', clickHandlerBoard);
   }
 
-  activateClickableBoard();
+  function endGame(state) {
+    deactivateClickableBoard();
 
-  return { updateScreen, deactivateClickableBoard };
+    // Show win message
+    const winMessage = document.createElement('div');
+    if (state === true) {
+      winMessage.textContent = `${gameController
+        .getActivePlayer()
+        .getName()} wins this round!`;
+    } else {
+      winMessage.textContent = "Tic-tac-TIE!! I'll see myself out...";
+    }
+
+    const winMessageDiv = document.querySelector('.win-message');
+    winMessageDiv.appendChild(winMessage);
+  }
+
+  function newGame() {
+    gameBoard.resetBoard();
+    activateClickableBoard();
+
+    // Empty all the cells on screen
+    const allCells = board.childNodes;
+    allCells.forEach((cell) => {
+      const tempCell = cell;
+      tempCell.textContent = '';
+    });
+  }
+
+  function handleControls() {
+    const newGameBtn = document.querySelector('.new-game');
+    newGameBtn.addEventListener('click', newGame);
+  }
+
+  activateClickableBoard();
+  handleControls();
+
+  return { updateScreen, endGame, newGame };
 })();
