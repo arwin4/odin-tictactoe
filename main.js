@@ -4,6 +4,7 @@
 // https://www.ayweb.dev/blog/building-a-house-from-the-inside-out
 
 // TODO: Add underscore to private variables
+// TODO: Make player 1 always go first (even after the new game button is used)
 
 const playerFactory = (name, marker) => {
   const getName = () => name;
@@ -49,11 +50,15 @@ const gameBoard = (() => {
     // conditions, since that's a fairly short one, but to practice, I wanted to
     // write down more of the actual logic of the game.
 
+    const result = { gameFinished: false, isResultDraw: false };
+
     // Check for horizontal wins
     for (let i = 0; i < 3; i += 1) {
       const row = gameBoardArray[i];
       if (row.every((cell) => cell === marker)) {
-        return true;
+        result.gameFinished = true;
+        result.isResultDraw = false;
+        return result;
       }
     }
 
@@ -65,7 +70,9 @@ const gameBoard = (() => {
         gameBoardArray[1][i] === marker &&
         gameBoardArray[2][i] === marker
       ) {
-        return true;
+        result.gameFinished = true;
+        result.isResultDraw = false;
+        return result;
       }
     }
 
@@ -78,17 +85,21 @@ const gameBoard = (() => {
         gameBoardArray[1][1] === marker &&
         gameBoardArray[2][0] === marker)
     ) {
-      return true;
+      result.gameFinished = true;
+      result.isResultDraw = false;
+      return result;
     }
 
     // If there's no winner but the board is full, it's a draw.
     // Check whether every cell isn't still null.
     if (gameBoardArray.every((row) => row.every((cell) => cell !== null))) {
-      return false;
+      result.gameFinished = true;
+      result.isResultDraw = true;
+      return result;
     }
 
     // No game ending state found
-    return undefined;
+    return result;
   }
 
   const getGameBoard = () => gameBoardArray;
@@ -128,32 +139,32 @@ const gameController = (() => {
   }
 
   function playRound(x, y) {
-    // Have user try again if their move was invalid.
+    let roundResult = { validMove: null };
+
+    // If the move is invalid, pass that on
     if (gameBoard.makeMove(x, y, activePlayer.getMarker()) === false) {
-      console.log("Sorry, that move isn't valid. Please try again.");
-      printNewRound();
-      return false;
+      roundResult.validMove = false;
+      console.log(roundResult);
+      return roundResult;
     }
 
-    // Check for a win or draw
-    switch (gameBoard.checkForWin(activePlayer.getMarker())) {
-      case true: // win
-        screenController.endGame(true);
-        break;
-      case false: // draw
-        screenController.endGame(false);
-        break;
-      case undefined: // No win or draw detected, game continues.
-        console.log('No win or draw detected');
-        break;
-      default:
-        break;
+    // If the move is valid, check for a win
+    roundResult.validMove = true;
+
+    roundResult = gameBoard.checkForWin(activePlayer.getMarker());
+    if (roundResult.gameFinished === true) {
+      // End the game
+      console.log(activePlayer.getName());
+      console.log(roundResult);
+      roundResult.winner = activePlayer.getName();
+      switchPlayerTurn();
+      return roundResult;
     }
 
-    console.log(`${activePlayer.getName()} made this move:`);
-    printNewRound();
+    // If the move was valid, but there's no win or draw, continue.
     switchPlayerTurn();
-    return true;
+    console.log(roundResult);
+    return roundResult;
   }
 
   function getActivePlayer() {
@@ -180,9 +191,34 @@ const screenController = (() => {
     }
   }
 
+  function endGame(roundResult) {
+    // Deactivate the board and
+    deactivateClickableBoard();
+
+    const { isResultDraw } = roundResult;
+    const { winner } = roundResult;
+
+    // Show win message
+    const winMessage = document.createElement('div');
+    if (isResultDraw === false) {
+      winMessage.textContent = `${winner} wins this round!`;
+    } else {
+      winMessage.textContent = "Tic-tac-TIE!! I'll see myself out...";
+    }
+
+    const winMessageDiv = document.querySelector('.win-message');
+    winMessageDiv.appendChild(winMessage);
+  }
+
   function updateScreen(button) {
     const btn = button;
-    console.log(`It's ${gameController.getActivePlayer().getName()}'s turn.`);
+    const xPosition = button.getAttribute('xPosition');
+    const yPosition = button.getAttribute('yPosition');
+    const roundResult = gameController.playRound(xPosition, yPosition);
+    console.log(roundResult);
+
+    // If the move was invalid, ignore it
+    if (roundResult.validMove === false) return;
 
     // Show the move on the board
     // TODO: remove need for the active player's marker swap (allow direct
@@ -192,15 +228,12 @@ const screenController = (() => {
     } else {
       btn.textContent = 'X';
     }
+
+    if (roundResult.gameFinished === true) endGame(roundResult);
   }
 
   function clickHandlerBoard(e) {
-    const xPosition = e.target.getAttribute('xPosition');
-    const yPosition = e.target.getAttribute('yPosition');
-    // Update the screen if the move was valid
-    if (gameController.playRound(xPosition, yPosition) === true) {
-      updateScreen(e.target);
-    }
+    updateScreen(e.target);
   }
 
   function activateClickableBoard() {
@@ -209,23 +242,6 @@ const screenController = (() => {
 
   function deactivateClickableBoard() {
     board.removeEventListener('click', clickHandlerBoard);
-  }
-
-  function endGame(state) {
-    deactivateClickableBoard();
-
-    // Show win message
-    const winMessage = document.createElement('div');
-    if (state === true) {
-      winMessage.textContent = `${gameController
-        .getActivePlayer()
-        .getName()} wins this round!`;
-    } else {
-      winMessage.textContent = "Tic-tac-TIE!! I'll see myself out...";
-    }
-
-    const winMessageDiv = document.querySelector('.win-message');
-    winMessageDiv.appendChild(winMessage);
   }
 
   function newGame() {
@@ -247,6 +263,4 @@ const screenController = (() => {
 
   activateClickableBoard();
   handleControls();
-
-  return { updateScreen, endGame, newGame };
 })();
