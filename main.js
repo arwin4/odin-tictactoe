@@ -117,8 +117,8 @@ const gameBoard = (() => {
 
 const gameController = (() => {
   function setPlayers() {
-    const player1 = playerFactory('Player 1', 'X');
-    const player2 = playerFactory('Player 2', 'O');
+    const player1 = playerFactory('Player 1', 'cross');
+    const player2 = playerFactory('Player 2', 'circle');
 
     return [player1, player2];
   }
@@ -179,7 +179,6 @@ const screenController = (() => {
 
   // Create the cells with coordinate attributes so that they can be passed on
   // to gameRound(x, y)
-
   for (let i = 0; i < 3; i += 1) {
     for (let j = 0; j < 3; j += 1) {
       const cell = document.createElement('button');
@@ -192,9 +191,48 @@ const screenController = (() => {
 
   const allCells = board.childNodes;
 
+  function showInputOnHover(e) {
+    // Show a ghost image of the current input when user hovers over a cell
+
+    const button = e.target;
+    const marker = gameController.getActivePlayer().getMarker();
+
+    // Show the ghost when cursor enters
+    if (e.type === 'mouseover') {
+      if (marker === 'cross') {
+        button.classList.add('cross-transparent');
+      } else {
+        button.classList.add('circle-transparent');
+      }
+    } else {
+      // Remove the ghost when the cursor leaves
+      button.classList.remove('cross-transparent', 'circle-transparent');
+    }
+  }
+
+  function deactivateInteractiveBoard() {
+    // Disable all cells completely
+
+    allCells.forEach((cell) => {
+      const tempCell = cell;
+
+      // Visually make the cell inactive
+      tempCell.classList.add('closed');
+
+      if (tempCell.disabled === true) return;
+
+      // Disable the cell semantically
+      tempCell.disabled = true;
+
+      // Remove all listeners. Clicked cells are already disabled.
+      tempCell.removeEventListener('mouseover', showInputOnHover);
+      tempCell.removeEventListener('mouseout', showInputOnHover);
+    });
+  }
+
   function endGame(roundResult) {
     // Deactivate the board and show win message
-    deactivateClickableBoard();
+    deactivateInteractiveBoard();
 
     const { isResultDraw } = roundResult;
     const { winner } = roundResult;
@@ -211,53 +249,58 @@ const screenController = (() => {
     winMessageDiv.appendChild(winMessage);
   }
 
-  function updateScreen(button) {
+  function showMove(button) {
     const btn = button;
     const xPosition = button.getAttribute('xPosition');
     const yPosition = button.getAttribute('yPosition');
     const roundResult = gameController.playRound(xPosition, yPosition);
-    console.log(roundResult);
 
     // If the move was invalid, ignore it
     if (roundResult.validMove === false) return;
 
+    // Remove the hover-on-input displays for this cell
+    btn.classList.remove('circle-transparent', 'cross-transparent');
+
+    // Mark the button as disabled. This remove the pointer on hover and
+    // indirectly deactivates click event listener.
+    btn.disabled = true;
+
     // Show the move on the board
     // TODO: remove need for the active player's marker swap (allow direct
     // passing of the marker)
-    if (gameController.getActivePlayer().getMarker() === 'X') {
-      btn.classList.toggle('circle');
+    if (gameController.getActivePlayer().getMarker() === 'cross') {
+      btn.classList.add('circle');
     } else {
-      btn.classList.toggle('cross');
+      btn.classList.add('cross');
     }
-
-    btn.disabled = true;
 
     if (roundResult.gameFinished === true) endGame(roundResult);
   }
 
-  function clickHandlerBoard(e) {
-    updateScreen(e.target);
-  }
-
-  function activateClickableBoard() {
+  function activateInteractiveBoard() {
     allCells.forEach((cell) => {
       const tempCell = cell;
+
+      // Remove properties of potentially disabled cells
       tempCell.disabled = false;
       tempCell.classList.remove('closed');
-    });
-  }
 
-  function deactivateClickableBoard() {
-    allCells.forEach((cell) => {
-      const tempCell = cell;
-      tempCell.disabled = true;
-      tempCell.classList.add('closed');
+      // Handle click and remove listeners that show input on hover
+      tempCell.addEventListener('click', (e) => {
+        tempCell.removeEventListener('mouseover', showInputOnHover);
+        tempCell.removeEventListener('mouseout', showInputOnHover);
+        showMove(e.target);
+      });
+
+      // Add listeners for showing input on hover
+      tempCell.addEventListener('mouseover', showInputOnHover);
+      tempCell.addEventListener('mouseout', showInputOnHover);
     });
   }
 
   function newGame() {
     gameBoard.resetBoard();
-    activateClickableBoard();
+    activateInteractiveBoard();
 
     // Empty all the cells on screen
     allCells.forEach((cell) => {
@@ -267,11 +310,10 @@ const screenController = (() => {
   }
 
   function handleControls() {
-    board.addEventListener('click', clickHandlerBoard);
-
     const newGameBtn = document.querySelector('.new-game');
     newGameBtn.addEventListener('click', newGame);
   }
 
   handleControls();
+  activateInteractiveBoard();
 })();

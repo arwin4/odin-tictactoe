@@ -95,13 +95,27 @@ body {
 }
 
 .cross {
+  transition: 0.1s;
   background: url('https://api.iconify.design/akar-icons/cross.svg?color=%23ff5959')
     no-repeat center center / contain;
 }
 
+.cross-transparent {
+  background: url('https://api.iconify.design/akar-icons/cross.svg?color=%23ff5959')
+    no-repeat center center / contain;
+  opacity: 30%;
+}
+
 .circle {
+  transition: 0.1s;
   background: url('https://api.iconify.design/ph/circle-bold.svg?color=%23ff5959')
     no-repeat center center / contain;
+}
+
+.circle-transparent {
+  background: url('https://api.iconify.design/ph/circle-bold.svg?color=%23ff5959')
+    no-repeat center center / contain;
+  opacity: 30%;
 }
 
 .new-game {
