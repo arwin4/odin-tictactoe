@@ -116,9 +116,6 @@ const gameBoard = (() => {
 })();
 
 const gameController = (() => {
-  // function setPlayers(player1, marker1, player2, marker2) {
-  //   // set player properties from DOM
-
   function setPlayers() {
     const player1 = playerFactory('Player 1', 'X');
     const player2 = playerFactory('Player 2', 'O');
@@ -182,17 +179,21 @@ const screenController = (() => {
 
   // Create the cells with coordinate attributes so that they can be passed on
   // to gameRound(x, y)
+
   for (let i = 0; i < 3; i += 1) {
     for (let j = 0; j < 3; j += 1) {
       const cell = document.createElement('button');
       cell.setAttribute('xPosition', j + 1);
       cell.setAttribute('yPosition', i + 1);
+      cell.classList.add('cell');
       board.appendChild(cell);
     }
   }
 
+  const allCells = board.childNodes;
+
   function endGame(roundResult) {
-    // Deactivate the board and
+    // Deactivate the board and show win message
     deactivateClickableBoard();
 
     const { isResultDraw } = roundResult;
@@ -224,9 +225,9 @@ const screenController = (() => {
     // TODO: remove need for the active player's marker swap (allow direct
     // passing of the marker)
     if (gameController.getActivePlayer().getMarker() === 'X') {
-      btn.textContent = 'O';
+      btn.classList.toggle('circle');
     } else {
-      btn.textContent = 'X';
+      btn.classList.toggle('cross');
     }
 
     if (roundResult.gameFinished === true) endGame(roundResult);
@@ -238,10 +239,18 @@ const screenController = (() => {
 
   function activateClickableBoard() {
     board.addEventListener('click', clickHandlerBoard);
+
+    allCells.forEach((cell) => {
+      const tempCell = cell;
+      tempCell.disabled = false;
+    });
   }
 
   function deactivateClickableBoard() {
-    board.removeEventListener('click', clickHandlerBoard);
+    allCells.forEach((cell) => {
+      const tempCell = cell;
+      tempCell.disabled = true;
+    });
   }
 
   function newGame() {
@@ -249,10 +258,9 @@ const screenController = (() => {
     activateClickableBoard();
 
     // Empty all the cells on screen
-    const allCells = board.childNodes;
     allCells.forEach((cell) => {
       const tempCell = cell;
-      tempCell.textContent = '';
+      tempCell.classList.remove('circle', 'cross');
     });
   }
 
