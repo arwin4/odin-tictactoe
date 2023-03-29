@@ -72,12 +72,18 @@ body {
   cursor: pointer;
 }
 
-.cell[disabled] {
-  background-color: rgba(0, 0, 0, 0.2);
+/* Disable used buttons */
+.cell + .cross,
+.cell + .circle {
   cursor: auto;
 }
 
-.cell:not([disabled='']):hover {
+.cell[disabled] {
+  cursor: auto;
+}
+
+.closed {
+  background-color: rgba(0, 0, 0, 0.2) !important;
 }
 
 .controls {

@@ -230,6 +230,8 @@ const screenController = (() => {
       btn.classList.toggle('cross');
     }
 
+    btn.disabled = true;
+
     if (roundResult.gameFinished === true) endGame(roundResult);
   }
 
@@ -238,11 +240,10 @@ const screenController = (() => {
   }
 
   function activateClickableBoard() {
-    board.addEventListener('click', clickHandlerBoard);
-
     allCells.forEach((cell) => {
       const tempCell = cell;
       tempCell.disabled = false;
+      tempCell.classList.remove('closed');
     });
   }
 
@@ -250,6 +251,7 @@ const screenController = (() => {
     allCells.forEach((cell) => {
       const tempCell = cell;
       tempCell.disabled = true;
+      tempCell.classList.add('closed');
     });
   }
 
@@ -265,10 +267,11 @@ const screenController = (() => {
   }
 
   function handleControls() {
+    board.addEventListener('click', clickHandlerBoard);
+
     const newGameBtn = document.querySelector('.new-game');
     newGameBtn.addEventListener('click', newGame);
   }
 
-  activateClickableBoard();
   handleControls();
 })();
