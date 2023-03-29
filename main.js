@@ -174,18 +174,20 @@ const gameController = (() => {
 })();
 
 const screenController = (() => {
-  // Render the board
   const board = document.querySelector('.gameboard');
 
-  // Create the cells with coordinate attributes so that they can be passed on
-  // to gameRound(x, y)
-  for (let i = 0; i < 3; i += 1) {
-    for (let j = 0; j < 3; j += 1) {
-      const cell = document.createElement('button');
-      cell.setAttribute('xPosition', j + 1);
-      cell.setAttribute('yPosition', i + 1);
-      cell.classList.add('cell');
-      board.appendChild(cell);
+  // Render the board
+  function initialBoardRender() {
+    // Create the cells with coordinate attributes so that they can be passed on
+    // to gameRound(x, y)
+    for (let i = 0; i < 3; i += 1) {
+      for (let j = 0; j < 3; j += 1) {
+        const cell = document.createElement('button');
+        cell.setAttribute('xPosition', j + 1);
+        cell.setAttribute('yPosition', i + 1);
+        cell.classList.add('cell');
+        board.appendChild(cell);
+      }
     }
   }
 
@@ -314,6 +316,7 @@ const screenController = (() => {
     newGameBtn.addEventListener('click', newGame);
   }
 
+  initialBoardRender();
   handleControls();
   activateInteractiveBoard();
 })();
