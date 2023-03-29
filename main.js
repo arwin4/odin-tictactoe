@@ -52,29 +52,30 @@ const gameBoard = (() => {
 
     const result = { gameFinished: false, isResultDraw: false };
 
-    // Check for horizontal wins
-    for (let i = 0; i < 3; i += 1) {
-      const row = gameBoardArray[i];
-      if (row.every((cell) => cell === marker)) {
-        result.gameFinished = true;
-        result.isResultDraw = false;
-        return result;
+    function checkStraightWins(board) {
+      for (let i = 0; i < 3; i += 1) {
+        const row = board[i];
+        if (row.every((cell) => cell === marker)) {
+          result.gameFinished = true;
+          result.isResultDraw = false;
+          return result;
+        }
       }
+      return result;
     }
 
-    // Check for vertical wins
-    // TODO: find wins like horizontal using every()
-    for (let i = 0; i < 3; i += 1) {
-      if (
-        gameBoardArray[0][i] === marker &&
-        gameBoardArray[1][i] === marker &&
-        gameBoardArray[2][i] === marker
-      ) {
-        result.gameFinished = true;
-        result.isResultDraw = false;
-        return result;
-      }
+    // Check for horizontal wins
+    checkStraightWins(gameBoardArray);
+
+    // Swap the axes to check for vertical wins
+    // Transpose function source: https://stackoverflow.com/a/46805290
+    function transpose(board) {
+      return board[0].map((col, i) => board.map((row) => row[i]));
     }
+
+    const swappedBoard = transpose(gameBoardArray);
+
+    checkStraightWins(swappedBoard);
 
     // Check for diagonal wins
     if (
@@ -98,7 +99,7 @@ const gameBoard = (() => {
       return result;
     }
 
-    // No game ending state found
+    // No game ending state found. Result unchanged from initialization.
     return result;
   }
 
