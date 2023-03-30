@@ -151,9 +151,7 @@ const gameController = (() => {
     return roundResult;
   }
 
-  function getActivePlayer() {
-    return activePlayer;
-  }
+  const getActivePlayer = () => activePlayer;
 
   gameBoard.resetBoard();
 
