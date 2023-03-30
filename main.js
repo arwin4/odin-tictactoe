@@ -46,9 +46,6 @@ const gameBoard = (() => {
 
   function checkForWin(marker) {
     // Check for a win first. If there's none, check for a draw.
-    // NOTE: I realize it's faster to check against a list of all win
-    // conditions, since that's a fairly short one, but to practice, I wanted to
-    // write down more of the actual logic of the game.
 
     const result = { gameFinished: false, isResultDraw: false };
 
@@ -103,17 +100,7 @@ const gameBoard = (() => {
     return result;
   }
 
-  const getGameBoard = () => gameBoardArray;
-
-  function printGameBoard() {
-    console.log(gameBoardArray[0]);
-    console.log(gameBoardArray[1]);
-    console.log(gameBoardArray[2]);
-  }
-
-  resetBoard();
-
-  return { getGameBoard, makeMove, printGameBoard, checkForWin, resetBoard };
+  return { makeMove, checkForWin, resetBoard };
 })();
 
 const gameController = (() => {
@@ -131,18 +118,12 @@ const gameController = (() => {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
   };
 
-  function printNewRound() {
-    gameBoard.printGameBoard();
-    // console.log(`It's ${activePlayer.getName()}'s turn.`);
-  }
-
   function playRound(x, y) {
     let roundResult = { validMove: null };
 
     // If the move is invalid, pass that on
     if (gameBoard.makeMove(x, y, activePlayer.getMarker()) === false) {
       roundResult.validMove = false;
-      console.log(roundResult);
       return roundResult;
     }
 
@@ -152,8 +133,6 @@ const gameController = (() => {
     roundResult = gameBoard.checkForWin(activePlayer.getMarker());
     if (roundResult.gameFinished === true) {
       // End the game
-      console.log(activePlayer.getName());
-      console.log(roundResult);
       roundResult.winner = activePlayer.getName();
       switchPlayerTurn();
       return roundResult;
@@ -161,7 +140,6 @@ const gameController = (() => {
 
     // If the move was valid, but there's no win or draw, continue.
     switchPlayerTurn();
-    console.log(roundResult);
     return roundResult;
   }
 
@@ -169,7 +147,7 @@ const gameController = (() => {
     return activePlayer;
   }
 
-  printNewRound();
+  gameBoard.resetBoard();
 
   return { playRound, getActivePlayer };
 })();
