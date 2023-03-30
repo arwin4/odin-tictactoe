@@ -104,15 +104,23 @@ const gameBoard = (() => {
 })();
 
 const gameController = (() => {
-  function setPlayers() {
-    const player1 = playerFactory('Player 1', 'cross');
-    const player2 = playerFactory('Player 2', 'circle');
+  function setPlayers(player1name = 'Player one', player2name = 'Player two') {
+    const player1 = playerFactory(player1name, 'cross');
+    const player2 = playerFactory(player2name, 'circle');
 
     return [player1, player2];
   }
 
-  const players = setPlayers();
-  let activePlayer = players[0];
+  // Create two default players. Allow Player one to make the first move.
+  let players = setPlayers();
+  const setActivePlayer = () => players[0];
+  let activePlayer = setActivePlayer();
+
+  // Allow the user to set their own player names
+  function setNewPlayers(player1name, player2name) {
+    players = setPlayers(player1name, player2name);
+    activePlayer = setActivePlayer();
+  }
 
   const switchPlayerTurn = () => {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
@@ -149,7 +157,7 @@ const gameController = (() => {
 
   gameBoard.resetBoard();
 
-  return { playRound, getActivePlayer };
+  return { setPlayers, playRound, getActivePlayer, setNewPlayers };
 })();
 
 const screenController = (() => {
