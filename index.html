@@ -22,6 +22,7 @@
       <h1 class="title">Tic tac toe</h1>
       <div class="gameboard"></div>
       <div class="win-message"></div>
+
       <div class="controls">
         <button class="new-game">
           <iconify-icon
@@ -30,6 +31,34 @@
           ></iconify-icon>
           New game
         </button>
+        <h3>Enter custom names if you want.</h3>
+        <p>Game will restart.</p>
+        <form id="custom-names" action="">
+          <input
+            type="text"
+            name="player1"
+            id="player1"
+            autocomplete="off"
+            minlength="2"
+            maxlength="30"
+            spellcheck="false"
+            placeholder="Player one"
+            autofocus
+            required
+          />
+          <input
+            type="text"
+            name="player2"
+            id="player2"
+            autocomplete="off"
+            minlength="2"
+            maxlength="30"
+            spellcheck="false"
+            placeholder="Player two"
+            required
+          />
+        </form>
+        <button form="custom-names" type="submit">Submit</button>
       </div>
     </div>
 

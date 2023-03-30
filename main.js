@@ -303,7 +303,26 @@ const screenController = (() => {
     newGameBtn.addEventListener('click', newGame);
   }
 
+  function handleNewNames() {
+    const form = document.getElementById('custom-names');
+    const player1name = document.getElementById('player1');
+    const player2name = document.getElementById('player2');
+    form.addEventListener('submit', (e) => {
+      // Prevent page change
+      e.preventDefault();
+
+      gameController.setNewPlayers(player1name.value, player2name.value);
+
+      newGame();
+
+      // Empty the input fields
+      player1name.value = '';
+      player2name.value = '';
+    });
+  }
+
   initialBoardRender();
   handleControls();
+  handleNewNames();
   activateInteractiveBoard();
 })();
