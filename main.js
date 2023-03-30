@@ -157,7 +157,7 @@ const gameController = (() => {
 
   gameBoard.resetBoard();
 
-  return { setPlayers, playRound, getActivePlayer, setNewPlayers };
+  return { playRound, getActivePlayer, setNewPlayers };
 })();
 
 const screenController = (() => {
