@@ -153,5 +153,24 @@ body {
 .new-game {
   display: flex;
   align-items: center;
-  font-size: 1.5rem;
+
+  color: black;
+  font-size: 1.2rem;
+  font-family: 'Poppins', monospace;
+  font-weight: bold;
+
+  border: 2px solid rgb(0, 0, 0);
+  border-color: #ff5959;
+  border-radius: 2px;
+  background-color: #fab55a;
+}
+
+.new-game:hover {
+  cursor: pointer;
+  background-color: #f3d582;
+}
+
+.new-game:active {
+  background-color: #f1da9a;
+  border-color: #ea0808;
 }
