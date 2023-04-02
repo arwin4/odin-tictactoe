@@ -103,27 +103,32 @@ body {
   grid-area: win-message;
 }
 
+.name-wrapper {
+  display: flex;
+  gap: 5px;
+}
+
 /* Marker images */
 .cross {
   transition: 0.1s;
-  background: url('https://api.iconify.design/akar-icons/cross.svg?color=%23ff5959')
+  background: url('https://api.iconify.design/maki/cross.svg?color=%23ff5959')
     no-repeat center center / contain;
 }
 
 .cross-transparent {
-  background: url('https://api.iconify.design/akar-icons/cross.svg?color=%23ff5959')
+  background: url('https://api.iconify.design/maki/cross.svg?color=%23ff5959')
     no-repeat center center / contain;
   opacity: 30%;
 }
 
 .circle {
   transition: 0.1s;
-  background: url('https://api.iconify.design/ph/circle-bold.svg?color=%23ff5959')
+  background: url('https://api.iconify.design/maki/circle-stroked.svg?color=%23ff5959')
     no-repeat center center / contain;
 }
 
 .circle-transparent {
-  background: url('https://api.iconify.design/ph/circle-bold.svg?color=%23ff5959')
+  background: url('https://api.iconify.design/maki-circle-stroked.svg?color=%23ff5959')
     no-repeat center center / contain;
   opacity: 30%;
 }
