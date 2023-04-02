@@ -34,7 +34,6 @@ body {
   grid-template-areas:
     'title title'
     'gameboard-container controls'
-    'gameboard-container win-message'
     'gameboard-container scoreboard';
 }
 
@@ -52,7 +51,9 @@ body {
   grid-area: gameboard-container;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
+
+  position: relative;
 }
 
 .gameboard {
@@ -101,6 +102,16 @@ body {
 
 .win-message {
   grid-area: win-message;
+
+  /* Centering absolute element source: https://stackoverflow.com/a/8273750 */
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 70px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 250px;
+  text-align: center;
 }
 
 .name-wrapper {

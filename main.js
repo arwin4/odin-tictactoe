@@ -266,15 +266,13 @@ const screenController = (() => {
     const { winner } = roundResult;
 
     // Show win message
-    const winMessage = document.createElement('div');
+    const winMessage = document.querySelector('.win-message');
+
     if (isResultDraw === false) {
       winMessage.textContent = `${winner} wins this round!`;
     } else {
       winMessage.textContent = "Tic-tac-TIE!! I'll see myself out...";
     }
-
-    const winMessageDiv = document.querySelector('.win-message');
-    winMessageDiv.appendChild(winMessage);
   }
 
   function showMove(button) {
@@ -327,9 +325,15 @@ const screenController = (() => {
   }
 
   function newGame() {
+    // Reset the screen, board and score but keep player names
     gameBoard.resetBoard();
     activateInteractiveBoard();
     updateScoreBoard();
+
+    // Remove win message
+    // TODO: consolidate repeated queryselectors
+    const winMessage = document.querySelector('.win-message');
+    winMessage.textContent = '';
 
     // Empty all the cells on screen
     allCells.forEach((cell) => {
