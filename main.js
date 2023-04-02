@@ -169,7 +169,32 @@ const gameController = (() => {
 })();
 
 const screenController = (() => {
-  const board = document.querySelector('.gameboard');
+  function getDomElement() {
+    const board = document.querySelector('.gameboard');
+
+    return {
+      // Board
+      board,
+      allCells: board.childNodes,
+
+      // Scoreboard
+      player1nameDisplay: document.querySelector('.player1-name'),
+      player2nameDisplay: document.querySelector('.player2-name'),
+      player1winDisplay: document.querySelector('.player1-wins'),
+      player2winDisplay: document.querySelector('.player2-wins'),
+
+      // Win message
+      winMessage: document.querySelector('.win-message'),
+
+      // Controls
+      newGameBtn: document.querySelector('.new-game'),
+
+      // Custom names
+      form: document.getElementById('custom-names'),
+      player1nameInput: document.getElementById('player1'),
+      player2nameInput: document.getElementById('player2'),
+    };
+  }
 
   // Render the board
   function initialBoardRender() {
@@ -181,12 +206,10 @@ const screenController = (() => {
         cell.setAttribute('xPosition', j + 1);
         cell.setAttribute('yPosition', i + 1);
         cell.classList.add('cell');
-        board.appendChild(cell);
+        getDomElement().board.appendChild(cell);
       }
     }
   }
-
-  const allCells = board.childNodes;
 
   function showInputOnHover(e) {
     // Show a ghost image of the current input when user hovers over a cell
@@ -210,7 +233,7 @@ const screenController = (() => {
   function deactivateInteractiveBoard() {
     // Disable all cells completely
 
-    allCells.forEach((cell) => {
+    getDomElement().allCells.forEach((cell) => {
       const tempCell = cell;
 
       // Visually make the cell inactive
@@ -228,32 +251,28 @@ const screenController = (() => {
   }
 
   function updateScoreBoard() {
-    // TODO: create getPageElements to avoid repeat queryselecting
     // NOTE: Not very DRY
-    const player1nameDisplay = document.querySelector('.player1-name');
-    const player2nameDisplay = document.querySelector('.player2-name');
-    const player1winDisplay = document.querySelector('.player1-wins');
-    const player2winDisplay = document.querySelector('.player2-wins');
 
     const player1name = gameController.getPlayer1().getName();
     const player1score = gameController.getPlayer1().getWins();
+
     const player2name = gameController.getPlayer2().getName();
     const player2score = gameController.getPlayer2().getWins();
 
-    player1nameDisplay.textContent = player1name;
+    getDomElement().player1nameDisplay.textContent = player1name;
 
     if (player1score === 1) {
-      player1winDisplay.textContent = `${player1score} win`;
+      getDomElement().player1winDisplay.textContent = `${player1score} win`;
     } else {
-      player1winDisplay.textContent = `${player1score} wins`;
+      getDomElement().player1winDisplay.textContent = `${player1score} wins`;
     }
 
-    player2nameDisplay.textContent = player2name;
+    getDomElement().player2nameDisplay.textContent = player2name;
 
     if (player2score === 1) {
-      player2winDisplay.textContent = `${player2score} win`;
+      getDomElement().player2winDisplay.textContent = `${player2score} win`;
     } else {
-      player2winDisplay.textContent = `${player2score} wins`;
+      getDomElement().player2winDisplay.textContent = `${player2score} wins`;
     }
   }
 
@@ -266,12 +285,11 @@ const screenController = (() => {
     const { winner } = roundResult;
 
     // Show win message
-    const winMessage = document.querySelector('.win-message');
-
     if (isResultDraw === false) {
-      winMessage.textContent = `${winner} wins this round!`;
+      getDomElement().winMessage.textContent = `${winner} wins this round!`;
     } else {
-      winMessage.textContent = "Tic-tac-TIE!! I'll see myself out...";
+      getDomElement().winMessage.textContent =
+        "Tic-tac-TIE!! I'll see myself out...";
     }
   }
 
@@ -304,7 +322,7 @@ const screenController = (() => {
   }
 
   function activateInteractiveBoard() {
-    allCells.forEach((cell) => {
+    getDomElement().allCells.forEach((cell) => {
       const tempCell = cell;
 
       // Remove properties of potentially disabled cells
@@ -331,40 +349,34 @@ const screenController = (() => {
     updateScoreBoard();
 
     // Remove win message
-    // TODO: consolidate repeated queryselectors
-    const winMessage = document.querySelector('.win-message');
-    winMessage.textContent = '';
+    getDomElement().winMessage.textContent = '';
 
     // Empty all the cells on screen
-    allCells.forEach((cell) => {
+    getDomElement().allCells.forEach((cell) => {
       const tempCell = cell;
       tempCell.classList.remove('circle', 'cross');
     });
   }
 
   function handleControls() {
-    const newGameBtn = document.querySelector('.new-game');
-    newGameBtn.addEventListener('click', newGame);
+    getDomElement().newGameBtn.addEventListener('click', newGame);
   }
 
   function handleNewNames() {
-    const form = document.getElementById('custom-names');
-    const player1nameInput = document.getElementById('player1');
-    const player2nameInput = document.getElementById('player2');
-    form.addEventListener('submit', (e) => {
+    getDomElement().form.addEventListener('submit', (e) => {
       // Prevent page change
       e.preventDefault();
 
       gameController.setNewPlayers(
-        player1nameInput.value,
-        player2nameInput.value
+        getDomElement().player1nameInput.value,
+        getDomElement().player2nameInput.value
       );
 
       newGame();
 
       // Empty the input fields
-      player1nameInput.value = '';
-      player2nameInput.value = '';
+      getDomElement().player1nameInput.value = '';
+      getDomElement().player2nameInput.value = '';
     });
   }
 
