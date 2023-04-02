@@ -303,19 +303,22 @@ const screenController = (() => {
 
   function handleNewNames() {
     const form = document.getElementById('custom-names');
-    const player1name = document.getElementById('player1');
-    const player2name = document.getElementById('player2');
+    const player1nameInput = document.getElementById('player1');
+    const player2nameInput = document.getElementById('player2');
     form.addEventListener('submit', (e) => {
       // Prevent page change
       e.preventDefault();
 
-      gameController.setNewPlayers(player1name.value, player2name.value);
+      gameController.setNewPlayers(
+        player1nameInput.value,
+        player2nameInput.value
+      );
 
       newGame();
 
       // Empty the input fields
-      player1name.value = '';
-      player2name.value = '';
+      player1nameInput.value = '';
+      player2nameInput.value = '';
     });
   }
 
