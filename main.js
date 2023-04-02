@@ -7,10 +7,17 @@
 // TODO: Make player 1 always go first (even after the new game button is used)
 
 const playerFactory = (name, marker) => {
+  let wins = 0;
+
   const getName = () => name;
   const getMarker = () => marker;
+  const getWins = () => wins;
 
-  return { getName, getMarker };
+  const addWin = () => {
+    wins += 1;
+  };
+
+  return { getName, getMarker, addWin, getWins };
 };
 
 const gameBoard = (() => {
@@ -142,6 +149,7 @@ const gameController = (() => {
     if (roundResult.gameFinished === true) {
       // End the game
       roundResult.winner = activePlayer.getName();
+      activePlayer.addWin();
       switchPlayerTurn();
       return roundResult;
     }
@@ -152,10 +160,12 @@ const gameController = (() => {
   }
 
   const getActivePlayer = () => activePlayer;
+  const getPlayer1 = () => players[0];
+  const getPlayer2 = () => players[1];
 
   gameBoard.resetBoard();
 
-  return { playRound, getActivePlayer, setNewPlayers };
+  return { playRound, getActivePlayer, setNewPlayers, getPlayer1, getPlayer2 };
 })();
 
 const screenController = (() => {
@@ -217,9 +227,40 @@ const screenController = (() => {
     });
   }
 
+  function updateScoreBoard() {
+    // TODO: create getPageElements to avoid repeat queryselecting
+    // NOTE: Not very DRY
+    const player1nameDisplay = document.querySelector('.player1-name');
+    const player2nameDisplay = document.querySelector('.player2-name');
+    const player1winDisplay = document.querySelector('.player1-wins');
+    const player2winDisplay = document.querySelector('.player2-wins');
+
+    const player1name = gameController.getPlayer1().getName();
+    const player1score = gameController.getPlayer1().getWins();
+    const player2name = gameController.getPlayer2().getName();
+    const player2score = gameController.getPlayer2().getWins();
+
+    player1nameDisplay.textContent = player1name;
+
+    if (player1score === 1) {
+      player1winDisplay.textContent = `${player1score} win`;
+    } else {
+      player1winDisplay.textContent = `${player1score} wins`;
+    }
+
+    player2nameDisplay.textContent = player2name;
+
+    if (player2score === 1) {
+      player2winDisplay.textContent = `${player2score} win`;
+    } else {
+      player2winDisplay.textContent = `${player2score} wins`;
+    }
+  }
+
   function endGame(roundResult) {
     // Deactivate the board and show win message
     deactivateInteractiveBoard();
+    updateScoreBoard();
 
     const { isResultDraw } = roundResult;
     const { winner } = roundResult;
@@ -288,6 +329,7 @@ const screenController = (() => {
   function newGame() {
     gameBoard.resetBoard();
     activateInteractiveBoard();
+    updateScoreBoard();
 
     // Empty all the cells on screen
     allCells.forEach((cell) => {
@@ -326,4 +368,5 @@ const screenController = (() => {
   handleControls();
   handleNewNames();
   activateInteractiveBoard();
+  updateScoreBoard();
 })();

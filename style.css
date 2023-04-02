@@ -33,8 +33,9 @@ body {
   gap: 20px;
   grid-template-areas:
     'title title'
-    'gameboard controls'
-    'win-message win-message';
+    'gameboard-container controls'
+    'gameboard-container win-message'
+    'gameboard-container scoreboard';
 }
 
 .title {
@@ -45,6 +46,13 @@ body {
   color: #ff5959;
 
   text-align: center;
+}
+
+.gameboard-container {
+  grid-area: gameboard-container;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 .gameboard {
@@ -95,6 +103,7 @@ body {
   grid-area: win-message;
 }
 
+/* Marker images */
 .cross {
   transition: 0.1s;
   background: url('https://api.iconify.design/akar-icons/cross.svg?color=%23ff5959')
