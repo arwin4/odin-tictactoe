@@ -149,7 +149,7 @@ const gameController = (() => {
     if (roundResult.gameFinished === true) {
       // End the game
       roundResult.winner = activePlayer.getName();
-      activePlayer.addWin();
+      if (roundResult.isResultDraw === false) activePlayer.addWin();
       switchPlayerTurn();
       return roundResult;
     }
