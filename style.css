@@ -119,6 +119,12 @@ body {
   gap: 5px;
 }
 
+.name-wrapper img {
+  /* align with text */
+  position: relative;
+  top: 1px;
+}
+
 /* Marker images */
 .cross {
   transition: 0.1s;
