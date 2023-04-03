@@ -114,9 +114,14 @@ body {
   text-align: center;
 }
 
-.name-wrapper {
+.player-container {
   display: flex;
   gap: 5px;
+  border: 1px solid black;
+}
+
+.turn {
+  width: 20px;
 }
 
 /* Marker images */

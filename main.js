@@ -250,6 +250,23 @@ const screenController = (() => {
     });
   }
 
+  function showActivePlayerIndicator(gameOngoing = true) {
+    const player1turnIndicator = document.querySelector('.player1-turn');
+    const player2turnIndicator = document.querySelector('.player2-turn');
+
+    // Remove indicator if the game has ended, since there's no active player
+    if (!gameOngoing) {
+      [player1turnIndicator.textContent, player2turnIndicator.textContent] = '';
+      return;
+    }
+
+    const activePlayer = gameController.getActivePlayer();
+    const isPlayer1active = activePlayer === gameController.getPlayer1();
+
+    player1turnIndicator.textContent = isPlayer1active ? '🔴' : '';
+    player2turnIndicator.textContent = isPlayer1active ? '' : '🔴';
+  }
+
   function updateScoreBoard() {
     // NOTE: Not very DRY
 
@@ -280,6 +297,8 @@ const screenController = (() => {
     // Deactivate the board and show win message
     deactivateInteractiveBoard();
     updateScoreBoard();
+    // Disable the active player indicator
+    showActivePlayerIndicator(false);
 
     const { isResultDraw } = roundResult;
     const { winner } = roundResult;
@@ -318,6 +337,8 @@ const screenController = (() => {
       btn.classList.add('cross');
     }
 
+    // Update indicator
+    showActivePlayerIndicator();
     if (roundResult.gameFinished === true) endGame(roundResult);
   }
 
@@ -347,6 +368,7 @@ const screenController = (() => {
     gameBoard.resetBoard();
     activateInteractiveBoard();
     updateScoreBoard();
+    showActivePlayerIndicator();
 
     // Remove win message
     getDomElement().winMessage.textContent = '';
@@ -385,4 +407,5 @@ const screenController = (() => {
   handleNewNames();
   activateInteractiveBoard();
   updateScoreBoard();
+  showActivePlayerIndicator();
 })();
