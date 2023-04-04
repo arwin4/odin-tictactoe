@@ -194,6 +194,9 @@ const screenController = (() => {
       allCells: board.childNodes,
 
       // Scoreboard
+      player1container: document.querySelector('.player1-container'),
+      player2container: document.querySelector('.player2-container'),
+
       player1nameDisplay: document.querySelector('.player1-name'),
       player2nameDisplay: document.querySelector('.player2-name'),
 
@@ -268,25 +271,26 @@ const screenController = (() => {
   }
 
   function showActivePlayerIndicator(gameOngoing = true) {
-    return;
-    // eslint-disable-next-line no-unreachable
-    const player1turnIndicator = document.querySelector('.player1-turn');
-    const player2turnIndicator = document.querySelector('.player2-turn');
+    const player1 = getDomElement().player1container;
+    const player2 = getDomElement().player2container;
 
-    const player1scoreboard = document.querySelector('.player1-scoreboard');
-    // console.log(player1scoreboard);
-
-    // Remove indicator if the game has ended, since there's no active player
+    // Don't show an indicator is there's no game ongoing
     if (!gameOngoing) {
-      [player1turnIndicator.textContent, player2turnIndicator.textContent] = '';
+      player1.classList.remove('active-player');
+      player2.classList.remove('active-player');
       return;
     }
 
     const activePlayer = gameController.getActivePlayer();
     const isPlayer1active = activePlayer === gameController.getPlayer1();
 
-    player1turnIndicator.textContent = isPlayer1active ? '🔴' : '';
-    player2turnIndicator.textContent = isPlayer1active ? '' : '🔴';
+    if (isPlayer1active) {
+      player1.classList.add('active-player');
+      player2.classList.remove('active-player');
+    } else {
+      player1.classList.remove('active-player');
+      player2.classList.add('active-player');
+    }
   }
 
   function updateScoreBoard() {
@@ -393,8 +397,8 @@ const screenController = (() => {
   function handleResetScore() {
     getDomElement().resetScoreBtn.addEventListener('click', () => {
       gameController.resetScore();
-      newRound();
       gameController.switchPlayerTurn();
+      newRound();
     });
   }
 

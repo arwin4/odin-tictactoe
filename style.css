@@ -176,10 +176,6 @@ body {
   background-color: #fab55a;
 }
 
-.turn {
-  width: 20px;
-}
-
 /* Marker images */
 .cross {
   transition: 0.1s;
