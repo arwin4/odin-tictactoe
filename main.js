@@ -181,8 +181,6 @@ const screenController = (() => {
       // Scoreboard
       player1nameDisplay: document.querySelector('.player1-name'),
       player2nameDisplay: document.querySelector('.player2-name'),
-      player1winDisplay: document.querySelector('.player1-wins'),
-      player2winDisplay: document.querySelector('.player2-wins'),
 
       scoreDisplay: document.querySelector('.score'),
 
@@ -376,16 +374,26 @@ const screenController = (() => {
     getDomElement().newGameBtn.addEventListener('click', newGame);
   }
 
+  function showPlayerNames() {
+    const player1 = gameController.getPlayer1().getName();
+    const player2 = gameController.getPlayer2().getName();
+
+    // Show the names on screen
+    getDomElement().player1nameDisplay.textContent = player1;
+    getDomElement().player2nameDisplay.textContent = player2;
+  }
+
   function handleNewNames() {
     getDomElement().form.addEventListener('submit', (e) => {
       // Prevent page change
       e.preventDefault();
 
-      gameController.setNewPlayers(
-        getDomElement().player1nameInput.value,
-        getDomElement().player2nameInput.value
-      );
+      const newPlayer1 = getDomElement().player1nameInput.value;
+      const newPlayer2 = getDomElement().player2nameInput.value;
 
+      gameController.setNewPlayers(newPlayer1, newPlayer2);
+
+      showPlayerNames();
       newGame();
 
       // Empty the input fields
@@ -395,9 +403,11 @@ const screenController = (() => {
   }
 
   initialBoardRender();
-  handleControls();
-  handleNewNames();
   activateInteractiveBoard();
   updateScoreBoard();
   showActivePlayerIndicator();
+  showPlayerNames();
+
+  handleControls();
+  handleNewNames();
 })();
