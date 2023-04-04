@@ -16,7 +16,11 @@ const playerFactory = (name, marker) => {
     wins += 1;
   };
 
-  return { getName, getMarker, addWin, getWins };
+  const resetWins = () => {
+    wins = 0;
+  };
+
+  return { getName, getMarker, addWin, getWins, resetWins };
 };
 
 const gameBoard = (() => {
@@ -162,9 +166,22 @@ const gameController = (() => {
   const getPlayer1 = () => players[0];
   const getPlayer2 = () => players[1];
 
+  function resetScore() {
+    getPlayer1().resetWins();
+    getPlayer2().resetWins();
+  }
+
   gameBoard.resetBoard();
 
-  return { playRound, getActivePlayer, setNewPlayers, getPlayer1, getPlayer2 };
+  return {
+    playRound,
+    getActivePlayer,
+    switchPlayerTurn,
+    setNewPlayers,
+    getPlayer1,
+    getPlayer2,
+    resetScore,
+  };
 })();
 
 const screenController = (() => {
@@ -187,6 +204,7 @@ const screenController = (() => {
 
       // Controls
       newRoundBtn: document.querySelector('.new-round'),
+      resetScoreBtn: document.querySelector('.reset-score'),
 
       // Custom names
       form: document.getElementById('custom-names'),
@@ -372,6 +390,14 @@ const screenController = (() => {
     getDomElement().newRoundBtn.addEventListener('click', newRound);
   }
 
+  function handleResetScore() {
+    getDomElement().resetScoreBtn.addEventListener('click', () => {
+      gameController.resetScore();
+      newRound();
+      gameController.switchPlayerTurn();
+    });
+  }
+
   function showPlayerNames() {
     const player1 = gameController.getPlayer1().getName();
     const player2 = gameController.getPlayer2().getName();
@@ -408,4 +434,5 @@ const screenController = (() => {
 
   handleNewRound();
   handleNewNames();
+  handleResetScore();
 })();
