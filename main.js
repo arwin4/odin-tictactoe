@@ -4,7 +4,6 @@
 // https://www.ayweb.dev/blog/building-a-house-from-the-inside-out
 
 // TODO: Add underscore to private variables
-// TODO: Make player 1 always go first (even after the new game button is used)
 // TODO: Add reset score button
 
 const playerFactory = (name, marker) => {
@@ -370,7 +369,7 @@ const screenController = (() => {
     });
   }
 
-  function handleControls() {
+  function handleNewGame() {
     getDomElement().newGameBtn.addEventListener('click', newGame);
   }
 
@@ -408,6 +407,6 @@ const screenController = (() => {
   showActivePlayerIndicator();
   showPlayerNames();
 
-  handleControls();
+  handleNewGame();
   handleNewNames();
 })();
