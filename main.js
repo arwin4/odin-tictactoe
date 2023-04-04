@@ -184,6 +184,8 @@ const screenController = (() => {
       player1winDisplay: document.querySelector('.player1-wins'),
       player2winDisplay: document.querySelector('.player2-wins'),
 
+      scoreDisplay: document.querySelector('.score'),
+
       // Win message
       winMessage: document.querySelector('.win-message'),
 
@@ -279,7 +281,7 @@ const screenController = (() => {
     const player2score = gameController.getPlayer2().getWins();
 
     // Update element
-    const scoreDisplay = document.querySelector('.score');
+    const { scoreDisplay } = getDomElement();
     scoreDisplay.textContent = `${player1score} — ${player2score}`;
   }
 
