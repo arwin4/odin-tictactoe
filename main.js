@@ -3,7 +3,6 @@
 // This program takes heavy inspiration from
 // https://www.ayweb.dev/blog/building-a-house-from-the-inside-out
 
-// TODO: Add underscore to private variables
 // TODO: Add reset score button
 
 const playerFactory = (name, marker) => {
@@ -187,7 +186,7 @@ const screenController = (() => {
       winMessage: document.querySelector('.win-message'),
 
       // Controls
-      newGameBtn: document.querySelector('.new-game'),
+      newRoundBtn: document.querySelector('.new-round'),
 
       // Custom names
       form: document.getElementById('custom-names'),
@@ -352,7 +351,7 @@ const screenController = (() => {
     });
   }
 
-  function newGame() {
+  function newRound() {
     // Reset the screen, board and score but keep player names
     gameBoard.resetBoard();
     activateInteractiveBoard();
@@ -369,8 +368,8 @@ const screenController = (() => {
     });
   }
 
-  function handleNewGame() {
-    getDomElement().newGameBtn.addEventListener('click', newGame);
+  function handleNewRound() {
+    getDomElement().newRoundBtn.addEventListener('click', newRound);
   }
 
   function showPlayerNames() {
@@ -393,7 +392,7 @@ const screenController = (() => {
       gameController.setNewPlayers(newPlayer1, newPlayer2);
 
       showPlayerNames();
-      newGame();
+      newRound();
 
       // Empty the input fields
       getDomElement().player1nameInput.value = '';
@@ -407,6 +406,6 @@ const screenController = (() => {
   showActivePlayerIndicator();
   showPlayerNames();
 
-  handleNewGame();
+  handleNewRound();
   handleNewNames();
 })();
