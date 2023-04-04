@@ -5,6 +5,7 @@
 
 // TODO: Add underscore to private variables
 // TODO: Make player 1 always go first (even after the new game button is used)
+// TODO: Add reset score button
 
 const playerFactory = (name, marker) => {
   let wins = 0;
@@ -251,8 +252,13 @@ const screenController = (() => {
   }
 
   function showActivePlayerIndicator(gameOngoing = true) {
+    return;
+    // eslint-disable-next-line no-unreachable
     const player1turnIndicator = document.querySelector('.player1-turn');
     const player2turnIndicator = document.querySelector('.player2-turn');
+
+    const player1scoreboard = document.querySelector('.player1-scoreboard');
+    // console.log(player1scoreboard);
 
     // Remove indicator if the game has ended, since there's no active player
     if (!gameOngoing) {
@@ -268,29 +274,13 @@ const screenController = (() => {
   }
 
   function updateScoreBoard() {
-    // NOTE: Not very DRY
-
-    const player1name = gameController.getPlayer1().getName();
+    // Get scores
     const player1score = gameController.getPlayer1().getWins();
-
-    const player2name = gameController.getPlayer2().getName();
     const player2score = gameController.getPlayer2().getWins();
 
-    getDomElement().player1nameDisplay.textContent = player1name;
-
-    if (player1score === 1) {
-      getDomElement().player1winDisplay.textContent = `${player1score} win`;
-    } else {
-      getDomElement().player1winDisplay.textContent = `${player1score} wins`;
-    }
-
-    getDomElement().player2nameDisplay.textContent = player2name;
-
-    if (player2score === 1) {
-      getDomElement().player2winDisplay.textContent = `${player2score} win`;
-    } else {
-      getDomElement().player2winDisplay.textContent = `${player2score} wins`;
-    }
+    // Update element
+    const scoreDisplay = document.querySelector('.score');
+    scoreDisplay.textContent = `${player1score} — ${player2score}`;
   }
 
   function endGame(roundResult) {

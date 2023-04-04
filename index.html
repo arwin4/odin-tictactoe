@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bungee+Shade&family=IBM+Plex+Sans+Condensed&family=IBM+Plex+Sans:wght@600&family=Poppins:wght@500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bungee+Shade&family=IBM+Plex+Sans+Condensed&family=IBM+Plex+Sans:wght@600&display=swap"
       rel="stylesheet"
     />
 
@@ -36,7 +36,7 @@
             id="player1"
             autocomplete="off"
             minlength="2"
-            maxlength="30"
+            maxlength="11"
             spellcheck="false"
             placeholder="Player one"
             autofocus
@@ -48,7 +48,7 @@
             id="player2"
             autocomplete="off"
             minlength="2"
-            maxlength="30"
+            maxlength="11"
             spellcheck="false"
             placeholder="Player two"
             required
@@ -59,20 +59,17 @@
 
       <div class="scoreboard">
         <div class="player-container">
-          <p class="player1-turn turn"></p>
           <img
             src="https://api.iconify.design/maki/cross.svg?color=%23ff5959"
           />
-          <p class="player1-name"></p>
-          <p class="player1-wins"></p>
+          <p class="player1-name">Player one</p>
         </div>
+        <div class="score-container"><p class="score"></p></div>
         <div class="player-container">
-          <p class="player2-turn turn"></p>
           <img
             src="https://api.iconify.design/maki/circle-stroked.svg?color=%23ff5959"
           />
-          <p class="player2-name"></p>
-          <p class="player2-wins"></p>
+          <p class="player2-name">Player two</p>
         </div>
       </div>
     </div>
