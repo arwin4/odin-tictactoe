@@ -1,17 +1,7 @@
-.first-color {
-  background: #085f63;
-}
-
-.second-color {
-  background: #49beb7;
-}
-
-.third-color {
-  background: #facf5a;
-}
-
-.fourth-color {
-  background: #ff5959;
+:root {
+  --main-background: #facf5a;
+  --light-background: #f3d582;
+  --accent: #ff5959;
 }
 
 * {
@@ -22,7 +12,7 @@ body {
   margin: 0px;
   display: grid;
 
-  background-color: #facf5a;
+  background-color: var(--main-background);
   justify-content: center;
   align-items: center;
   height: 100vh;
@@ -45,7 +35,7 @@ body {
 
   font-family: 'Bungee Shade', sans-serif;
   font-size: 4rem;
-  color: #ff5959;
+  color: var(--accent);
 
   text-align: center;
 }
@@ -69,7 +59,7 @@ body {
   box-shadow: inset 0px 0px 5px 0px rgb(0 0 0 / 75%);
   border-radius: 2%;
 
-  background-color: #f3d582;
+  background-color: var(--light-background);
 }
 
 .cell {
@@ -118,14 +108,14 @@ body {
   font-weight: bold;
 
   border: 2px solid rgb(0, 0, 0);
-  border-color: #ff5959;
+  border-color: var(--accent);
   border-radius: 2px;
   background-color: #fab55a;
 }
 
 .control:hover {
   cursor: pointer;
-  background-color: #f3d582;
+  background-color: var(--light-background);
 }
 
 .control:active {
@@ -165,7 +155,7 @@ input:focus {
   width: 250px;
   text-align: center;
 
-  background-color: #facf5a;
+  background-color: var(--main-background);
   border-radius: 10px;
   box-shadow: 0px 0px 5px 0px rgb(0 0 0 / 75%);
 }
@@ -198,7 +188,7 @@ input:focus {
   line-height: 0px;
   font-size: 0.9rem;
 
-  background-color: #f3d582;
+  background-color: var(--light-background);
 
   padding: 0 10px;
 
