@@ -101,8 +101,6 @@ body {
 }
 
 .win-message {
-  grid-area: win-message;
-
   /* Centering absolute element source: https://stackoverflow.com/a/8273750 */
   position: absolute;
   left: 0;
@@ -112,6 +110,9 @@ body {
   margin-right: auto;
   width: 250px;
   text-align: center;
+
+  background-color: #facf5a;
+  border-radius: 10px;
 }
 
 .scoreboard {
