@@ -267,12 +267,12 @@ const screenController = (() => {
     });
   }
 
-  function showActivePlayerIndicator(gameOngoing = true) {
+  function showActivePlayerIndicator(gameFinished = false) {
     const player1 = getDomElement().player1container;
     const player2 = getDomElement().player2container;
 
-    // Don't show an indicator is there's no game ongoing
-    if (!gameOngoing) {
+    // Don't show an indicator is the game has finished
+    if (gameFinished) {
       player1.classList.remove('active-player');
       player2.classList.remove('active-player');
       return;
@@ -305,7 +305,7 @@ const screenController = (() => {
     deactivateInteractiveBoard();
     updateScoreBoard();
     // Disable the active player indicator
-    showActivePlayerIndicator(false);
+    showActivePlayerIndicator(roundResult.gameFinished);
 
     const { isResultDraw } = roundResult;
     const { winner } = roundResult;
