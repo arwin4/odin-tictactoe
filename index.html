@@ -28,9 +28,8 @@
       <div class="controls">
         <button class="control new-round">New round</button>
         <button class="control reset-score">Reset score</button>
-        <h3>Enter custom names if you want.</h3>
-        <p>Game will restart.</p>
         <form id="custom-names" action="">
+          <p>Enter your own name (optional)</p>
           <input
             type="text"
             name="player1"
@@ -55,7 +54,9 @@
             required
           />
         </form>
-        <button form="custom-names" type="submit">Submit</button>
+        <button class="control submit" form="custom-names" type="submit">
+          Submit
+        </button>
       </div>
 
       <div class="scoreboard">
