@@ -202,7 +202,7 @@ body {
   opacity: 30%;
 }
 
-.new-round {
+.control {
   display: flex;
   align-items: center;
 
@@ -217,12 +217,12 @@ body {
   background-color: #fab55a;
 }
 
-.new-round:hover {
+.control:hover {
   cursor: pointer;
   background-color: #f3d582;
 }
 
-.new-round:active {
+.control:active {
   background-color: #f1da9a;
   border-color: #ea0808;
 }
