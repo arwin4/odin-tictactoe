@@ -53,13 +53,13 @@ const gameBoard = (() => {
   function checkForWin(marker) {
     // Check for a win first. If there's none, check for a draw.
 
-    const result = { gameFinished: false, isResultDraw: false };
+    const result = { roundFinished: false, isResultDraw: false };
 
     function checkStraightWins(board) {
       for (let i = 0; i < 3; i += 1) {
         const row = board[i];
         if (row.every((cell) => cell === marker)) {
-          result.gameFinished = true;
+          result.roundFinished = true;
           result.isResultDraw = false;
           return result;
         }
@@ -89,7 +89,7 @@ const gameBoard = (() => {
         gameBoardArray[1][1] === marker &&
         gameBoardArray[2][0] === marker)
     ) {
-      result.gameFinished = true;
+      result.roundFinished = true;
       result.isResultDraw = false;
       return result;
     }
@@ -97,12 +97,12 @@ const gameBoard = (() => {
     // If there's no winner but the board is full, it's a draw.
     // Check whether every cell isn't still null.
     if (gameBoardArray.every((row) => row.every((cell) => cell !== null))) {
-      result.gameFinished = true;
+      result.roundFinished = true;
       result.isResultDraw = true;
       return result;
     }
 
-    // No game ending state found. Result unchanged from initialization.
+    // No round ending state found. Result unchanged from initialization.
     return result;
   }
 
@@ -145,8 +145,8 @@ const gameController = (() => {
     roundResult.validMove = true;
 
     roundResult = gameBoard.checkForWin(activePlayer.getMarker());
-    if (roundResult.gameFinished === true) {
-      // End the game
+    if (roundResult.roundFinished === true) {
+      // End the round
       roundResult.winner = activePlayer.getName();
       if (roundResult.isResultDraw === false) activePlayer.addWin();
       switchPlayerTurn();
@@ -267,12 +267,12 @@ const screenController = (() => {
     });
   }
 
-  function showActivePlayerIndicator(gameFinished = false) {
+  function showActivePlayerIndicator(roundFinished = false) {
     const player1 = getDomElement().player1container;
     const player2 = getDomElement().player2container;
 
-    // Don't show an indicator is the game has finished
-    if (gameFinished) {
+    // Don't show an indicator is the round has finished
+    if (roundFinished) {
       player1.classList.remove('active-player');
       player2.classList.remove('active-player');
       return;
@@ -300,12 +300,12 @@ const screenController = (() => {
     scoreDisplay.textContent = `${player1score} — ${player2score}`;
   }
 
-  function endGame(roundResult) {
+  function endRound(roundResult) {
     // Deactivate the board and show win message
     deactivateInteractiveBoard();
     updateScoreBoard();
     // Disable the active player indicator
-    showActivePlayerIndicator(roundResult.gameFinished);
+    showActivePlayerIndicator(roundResult.roundFinished);
 
     const { isResultDraw } = roundResult;
     const { winner } = roundResult;
@@ -344,7 +344,7 @@ const screenController = (() => {
 
     // Update indicator
     showActivePlayerIndicator();
-    if (roundResult.gameFinished === true) endGame(roundResult);
+    if (roundResult.roundFinished === true) endRound(roundResult);
   }
 
   function activateInteractiveBoard() {
