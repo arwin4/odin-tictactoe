@@ -1,9 +1,5 @@
-/* eslint-disable no-console */
-
 // This program takes heavy inspiration from
 // https://www.ayweb.dev/blog/building-a-house-from-the-inside-out
-
-// TODO: Add reset score button
 
 const playerFactory = (name, marker) => {
   let wins = 0;
@@ -184,6 +180,7 @@ const gameController = (() => {
   };
 })();
 
+// eslint-disable-next-line no-unused-vars
 const screenController = (() => {
   function getDomElement() {
     const board = document.querySelector('.gameboard');
@@ -339,8 +336,6 @@ const screenController = (() => {
     btn.disabled = true;
 
     // Show the move on the board
-    // TODO: remove need for the active player's marker swap (allow direct
-    // passing of the marker)
     if (gameController.getActivePlayer().getMarker() === 'cross') {
       btn.classList.add('circle');
     } else {
